@@ -9,7 +9,7 @@ export const addTodoAction = async (data: FormData) => {
   if (isString(title)) {
     const res = await addTodo({
       title,
-      date: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      date: dayjs().format(),
     })
     return res
   } else {
