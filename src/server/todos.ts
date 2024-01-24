@@ -2,7 +2,7 @@
 
 import { TodoType, addTodo, removeTodo, updateTodo } from '@/fetcher/todos'
 import dayjs from 'dayjs'
-import { isString, keyBy } from 'lodash-es'
+import { isString } from 'lodash-es'
 
 export const addTodoAction = async (data: FormData) => {
   const title = data.get('title')
