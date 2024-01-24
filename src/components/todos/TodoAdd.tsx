@@ -4,32 +4,26 @@ import { addTodoAction } from '@/server/todos'
 import { cn } from '@/utils/cn'
 import { Button } from '@ui/button'
 import { Input } from '@ui/input'
-import { useRef, useState } from 'react'
+import { useRef, useTransition } from 'react'
 
 export const TodoAdd = () => {
   const formRef = useRef<HTMLFormElement>(null)
-  const [text, setText] = useState('')
+  const [isLoading, startTransition] = useTransition()
   return (
     <form
       ref={formRef}
       className={cn(`
         hstack gap-4 mb-6 max-w-xl
+        ${isLoading ? 'pointer-events-none opacity-50' : ''}
       `)}
-      onSubmit={() => {
-        setText('')
-      }}
-      action={async (data) => {
-        await addTodoAction(data)
+      action={(data) => {
+        startTransition(() => {
+          addTodoAction(data)
+        })
+        formRef.current?.reset()
       }}
     >
-      <Input
-        name={'title'}
-        className={'flex-1'}
-        onChange={(e) => {
-          setText(e.target.value)
-        }}
-        value={text}
-      />
+      <Input name={'title'} className={'flex-1'} />
       <Button type='submit'>新規作成</Button>
     </form>
   )

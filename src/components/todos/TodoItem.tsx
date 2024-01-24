@@ -7,7 +7,7 @@ import { Button } from '@ui/button'
 import { Switch } from '@ui/switch'
 import { TableCell, TableRow } from '@ui/table'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { useTransition } from 'react'
 
 export const TodoItem = ({
   todo,
@@ -18,12 +18,12 @@ export const TodoItem = ({
   variant?: 'default' | 'detail'
   className?: string
 }) => {
-  const [loading, setLoading] = useState(false)
+  const [isLoading, startTransition] = useTransition()
 
   return (
     <TableRow
       className={cn(`
-      ${loading ? 'pointer-events-none opacity-50' : ''}
+      ${isLoading ? 'pointer-events-none opacity-50' : ''}
     `)}
     >
       <TableCell>{todo.id}</TableCell>
@@ -31,8 +31,10 @@ export const TodoItem = ({
       <TableCell>{todo.title}</TableCell>
       <TableCell className={'align-middle'}>
         <form
-          action={async () => {
-            await checkToggle(todo)
+          action={() => {
+            startTransition(() => {
+              checkToggle(todo)
+            })
           }}
         >
           <Switch checked={todo.done} type={'submit'} />
@@ -40,9 +42,11 @@ export const TodoItem = ({
       </TableCell>
       <TableCell className='text-right'>
         <form
-          action={async () => {
+          action={() => {
             if (confirm('削除してよろしいですか？')) {
-              await rmTodo(todo.id)
+              startTransition(() => {
+                rmTodo(todo.id)
+              })
             }
           }}
         >
