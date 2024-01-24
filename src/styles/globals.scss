@@ -1,0 +1,12 @@
+@use './base.scss' as *;
+
+// components
+@use './components/markdown.scss' as *;
+@use './components/stack.scss' as *;
+
+// utils
+@use './utilities.scss' as *;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

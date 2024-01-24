@@ -1,0 +1,40 @@
+{
+  "ts-node": {
+    // "esm": true,
+    "transpileOnly": true,
+    "experimentalSpecifierResolution": "node",
+    "require": ["tsconfig-paths/register"]
+  },
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",
+    "allowJs": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "NodeNext",
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+    "noImplicitThis": false,
+    "rootDir": "../",
+    "baseUrl": "./",
+    "paths": {
+      "@npm/*": ["./*"],
+      "@/*": ["../src/*"],
+      "@@/*": ["../*"]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.css",
+    "**/*.scss",
+    "**/*.json",
+    "**/*.astro",
+    "**/*.svg"
+  ],
+  "exclude": ["node_modules"]
+}
