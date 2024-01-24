@@ -1,4 +1,5 @@
 import { supabase } from './client'
+import { orderBy } from 'lodash-es'
 
 export type TodoType = {
   id: number
@@ -11,7 +12,8 @@ export const fetchTodosPath = '/todos/'
 export const fetchTodos = async () => {
   try {
     const { data, error } = await supabase.from('Todos').select('*')
-    return data as TodoType[]
+    const todos = data as TodoType[]
+    return orderBy(todos, 'date', 'desc')
   } catch (error) {
     console.log({ error })
   }
@@ -30,5 +32,44 @@ export const fetchTodoItem = async (id: number) => {
     }
   } catch (error) {
     console.log({ error })
+  }
+}
+
+export const addTodo = async (todo: Pick<TodoType, 'title' | 'date'>) => {
+  try {
+    const { data, error } = await supabase.from('Todos').upsert([todo]).select()
+    return data
+  } catch (error) {
+    return false
+  }
+}
+
+export const updateTodo = async (todo: Partial<TodoType>) => {
+  try {
+    const { data, error } = await supabase
+      .from('Todos')
+      .update(todo)
+      .eq('id', todo.id)
+      .select()
+
+    return data
+  } catch (error) {
+    return false
+  }
+}
+
+export const checkAll = async (todos: Pick<TodoType, 'id' | 'done'>[]) => {
+  const { data, error } = await supabase.from('Todos').upsert(todos)
+
+  return data
+}
+
+export const removeTodo = async (id: number) => {
+  try {
+    const { error } = await supabase.from('Todos').delete().eq('id', id)
+
+    return true
+  } catch (error) {
+    return false
   }
 }
