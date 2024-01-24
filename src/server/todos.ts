@@ -5,14 +5,18 @@ import { TodoType, addTodo, removeTodo, updateTodo } from '@/fetcher/todos'
 import { revalidatePath } from 'next/cache'
 import { isString } from 'lodash-es'
 
-dayjs.locale('ja')
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.tz.setDefault('Asia/Tokyo')
 
 export const addTodoAction = async (data: FormData) => {
   const title = data.get('title')
   if (isString(title)) {
     const res = await addTodo({
       title,
-      date: dayjs().format(),
+      date: dayjs().tz().format(),
     })
     revalidatePath('/')
     return res
