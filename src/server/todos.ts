@@ -1,7 +1,13 @@
 'use server'
 
 import dayjs from 'dayjs'
-import { TodoType, addTodo, removeTodo, updateTodo } from '@/fetcher/todos'
+import {
+  TodoType,
+  addTodo,
+  checkAll,
+  removeTodo,
+  updateTodo,
+} from '@/fetcher/todos'
 import { revalidatePath } from 'next/cache'
 import { isString } from 'lodash-es'
 
@@ -35,5 +41,10 @@ export const checkToggle = async (todo: TodoType) => {
 
 export const rmTodo = async (id: number) => {
   await removeTodo(id)
+  revalidatePath('/')
+}
+
+export const checkAllAction = async (todos: TodoType[]) => {
+  await checkAll(todos)
   revalidatePath('/')
 }

@@ -5,11 +5,15 @@ import { TodoType } from '@/fetcher/todos'
 import { TodoItem } from './TodoItem'
 import { Table, TableBody } from '@ui/table'
 import { TodoAdd } from './TodoAdd'
+import { TodoCheckAll } from './TodoCheckAll'
 
 export const TodoList = ({ todos }: { todos: TodoType[] }) => {
   return (
     <div className={`container py-10 max-w-4xl`}>
-      <TodoAdd />
+      <div className='hstack justify-between'>
+        <TodoAdd />
+        <TodoCheckAll todos={todos} />
+      </div>
       <Table>
         <colgroup>
           <col width={'10%'} />

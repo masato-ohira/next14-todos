@@ -24,7 +24,14 @@ export const TodoAdd = () => {
         formRef.current?.reset()
       }}
     >
-      <Input name={'title'} className={'flex-1'} />
+      <Input
+        placeholder='Todoタイトルを入力'
+        name={'title'}
+        className={`
+          w-96
+          !placeholder-black/30
+        `}
+      />
       <Button type='submit' className={`w-36`}>
         {isLoading ? (
           <LuLoader2 className={'animate-spin'} />
