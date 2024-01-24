@@ -1,6 +1,6 @@
 'use client'
 
-import { addTodoAction } from '@/server/todos'
+import { addTodo } from '@/fetcher/todos'
 import { cn } from '@/utils/cn'
 import { Button } from '@ui/button'
 import { Input } from '@ui/input'
@@ -19,7 +19,7 @@ export const TodoAdd = () => {
       `)}
       action={(data) => {
         startTransition(() => {
-          addTodoAction(data)
+          addTodo(data)
         })
         formRef.current?.reset()
       }}

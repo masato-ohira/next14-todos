@@ -1,7 +1,6 @@
 'use client'
 
-import { TodoType } from '@/fetcher/todos'
-import { checkToggle, rmTodo } from '@/server/todos'
+import { TodoType, removeTodo, updateTodo } from '@/fetcher/todos'
 import { cn } from '@/utils/cn'
 import { Button } from '@ui/button'
 import { Switch } from '@ui/switch'
@@ -33,7 +32,10 @@ export const TodoItem = ({
         <form
           action={() => {
             startTransition(() => {
-              checkToggle(todo)
+              updateTodo({
+                ...todo,
+                done: !todo.done,
+              })
             })
           }}
         >
@@ -45,7 +47,7 @@ export const TodoItem = ({
           action={() => {
             if (confirm('削除してよろしいですか？')) {
               startTransition(() => {
-                rmTodo(todo.id)
+                removeTodo(todo.id)
               })
             }
           }}

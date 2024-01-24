@@ -1,5 +1,9 @@
+'use server'
+
+import { dayjs } from '@/utils/dayjs'
 import { supabase } from './client'
 import { orderBy } from 'lodash-es'
+import { revalidatePath } from 'next/cache'
 
 export type TodoType = {
   id: number
@@ -8,7 +12,6 @@ export type TodoType = {
   done: boolean
 }
 
-export const fetchTodosPath = '/todos/'
 export const fetchTodos = async () => {
   try {
     const { data, error } = await supabase.from('Todos').select('*')
@@ -35,9 +38,16 @@ export const fetchTodoItem = async (id: number) => {
   }
 }
 
-export const addTodo = async (todo: Pick<TodoType, 'title' | 'date'>) => {
+export const addTodo = async (form: FormData) => {
   try {
+    const title = form.get('title')
+    const todo = {
+      title: title || 'Untitled',
+      date: dayjs().tz().format(),
+    }
+
     const { data, error } = await supabase.from('Todos').upsert([todo]).select()
+    revalidatePath('/')
     return data
   } catch (error) {
     return false
@@ -52,6 +62,7 @@ export const updateTodo = async (todo: Partial<TodoType>) => {
       .eq('id', todo.id)
       .select()
 
+    revalidatePath('/')
     return data
   } catch (error) {
     return false
@@ -60,14 +71,14 @@ export const updateTodo = async (todo: Partial<TodoType>) => {
 
 export const checkAll = async (todos: Pick<TodoType, 'id' | 'done'>[]) => {
   const { data, error } = await supabase.from('Todos').upsert(todos)
-
+  revalidatePath('/')
   return data
 }
 
 export const removeTodo = async (id: number) => {
   try {
     const { error } = await supabase.from('Todos').delete().eq('id', id)
-
+    revalidatePath('/')
     return true
   } catch (error) {
     return false
