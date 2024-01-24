@@ -8,7 +8,7 @@ const nextConfig = {
   },
   reactStrictMode: false,
   // output: 'export',
-  distDir: isDev ? undefined : `./dist`,
+  // distDir: isDev ? undefined : `./dist`,
   trailingSlash: true,
 }
 

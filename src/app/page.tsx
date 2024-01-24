@@ -6,7 +6,6 @@ const Page = async () => {
   const data = await fetchTodos()
   if (!data) return <MyLoader />
   return <TodoList todos={data} />
-  return <></>
 }
 
 export default Page
