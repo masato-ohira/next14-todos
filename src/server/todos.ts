@@ -5,6 +5,8 @@ import { TodoType, addTodo, removeTodo, updateTodo } from '@/fetcher/todos'
 import { revalidatePath } from 'next/cache'
 import { isString } from 'lodash-es'
 
+dayjs.locale('ja')
+
 export const addTodoAction = async (data: FormData) => {
   const title = data.get('title')
   if (isString(title)) {
