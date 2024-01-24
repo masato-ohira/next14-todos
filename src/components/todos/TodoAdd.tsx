@@ -5,6 +5,7 @@ import { cn } from '@/utils/cn'
 import { Button } from '@ui/button'
 import { Input } from '@ui/input'
 import { useRef, useTransition } from 'react'
+import { LuLoader2 } from 'react-icons/lu'
 
 export const TodoAdd = () => {
   const formRef = useRef<HTMLFormElement>(null)
@@ -24,7 +25,13 @@ export const TodoAdd = () => {
       }}
     >
       <Input name={'title'} className={'flex-1'} />
-      <Button type='submit'>新規作成</Button>
+      <Button type='submit' className={`w-36`}>
+        {isLoading ? (
+          <LuLoader2 className={'animate-spin'} />
+        ) : (
+          <span>新規作成</span>
+        )}
+      </Button>
     </form>
   )
 }
