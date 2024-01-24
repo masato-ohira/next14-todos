@@ -1,7 +1,6 @@
 import { fetchTodoItem } from '@/fetcher/todos'
 import { MyLoader } from '@c/loader/MyLoader'
 import { TodoItem } from '@c/todos/TodoItem'
-export const revalidate = 0
 
 const TodoPage = async ({ params }: { params: { id: number } }) => {
   const data = await fetchTodoItem(params.id)

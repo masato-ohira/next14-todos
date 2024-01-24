@@ -1,14 +1,12 @@
 'use client'
 
-import { TodoType, removeTodo, updateTodo } from '@/fetcher/todos'
+import { TodoType } from '@/fetcher/todos'
 import { checkToggle, rmTodo } from '@/server/todos'
 import { cn } from '@/utils/cn'
-import { sleep } from '@/utils/sleep'
 import { Button } from '@ui/button'
 import { Switch } from '@ui/switch'
 import { TableCell, TableRow } from '@ui/table'
 import dayjs from 'dayjs'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export const TodoItem = ({
@@ -21,7 +19,6 @@ export const TodoItem = ({
   className?: string
 }) => {
   const [loading, setLoading] = useState(false)
-  const router = useRouter()
 
   return (
     <TableRow
@@ -34,14 +31,8 @@ export const TodoItem = ({
       <TableCell>{todo.title}</TableCell>
       <TableCell className={'align-middle'}>
         <form
-          onSubmit={() => {
-            setLoading(true)
-          }}
           action={async () => {
-            setLoading(true)
             await checkToggle(todo)
-            router.refresh()
-            setLoading(false)
           }}
         >
           <Switch checked={todo.done} type={'submit'} />
@@ -49,17 +40,9 @@ export const TodoItem = ({
       </TableCell>
       <TableCell className='text-right'>
         <form
-          onSubmit={() => {
-            setLoading(true)
-          }}
           action={async () => {
             if (confirm('削除してよろしいですか？')) {
-              setLoading(true)
               await rmTodo(todo.id)
-              router.refresh()
-              setLoading(false)
-            } else {
-              setLoading(false)
             }
           }}
         >

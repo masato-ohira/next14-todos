@@ -4,25 +4,22 @@ import { addTodoAction } from '@/server/todos'
 import { cn } from '@/utils/cn'
 import { Button } from '@ui/button'
 import { Input } from '@ui/input'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 export const TodoAdd = () => {
+  const formRef = useRef<HTMLFormElement>(null)
   const [text, setText] = useState('')
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
   return (
     <form
+      ref={formRef}
       className={cn(`
         hstack gap-4 mb-6 max-w-xl
-        ${loading ? 'pointer-events-none opacity-70' : ''}
       `)}
-      action={async (data) => {
-        setLoading(true)
-        await addTodoAction(data)
+      onSubmit={() => {
         setText('')
-        setLoading(false)
-        router.refresh()
+      }}
+      action={async (data) => {
+        await addTodoAction(data)
       }}
     >
       <Input
