@@ -1,11 +1,13 @@
 'use client'
 
 import { map } from 'lodash-es'
-import { TodoType } from '@/fetcher/todos'
-import { TodoItem } from './TodoItem'
 import { Table, TableBody } from '@ui/table'
+
+import { TodoItem } from './TodoItem'
 import { TodoAdd } from './TodoAdd'
 import { TodoCheckAll } from './TodoCheckAll'
+
+import type { TodoType } from '@/fetcher/todos'
 
 export const TodoList = ({ todos }: { todos: TodoType[] }) => {
   return (

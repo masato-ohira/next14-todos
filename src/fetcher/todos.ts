@@ -18,7 +18,7 @@ export const fetchTodos = async () => {
     const todos = data as TodoType[]
     return orderBy(todos, 'date', 'desc')
   } catch (error) {
-    console.log({ error })
+    throw new Error('fetchTodos')
   }
 }
 
@@ -34,7 +34,7 @@ export const fetchTodoItem = async (id: number) => {
       return null
     }
   } catch (error) {
-    console.log({ error })
+    throw new Error('fetchTodoItem')
   }
 }
 
@@ -48,9 +48,8 @@ export const addTodo = async (form: FormData) => {
 
     const { data, error } = await supabase.from('Todos').upsert([todo]).select()
     revalidatePath('/')
-    return data
   } catch (error) {
-    return false
+    throw new Error('addTodo')
   }
 }
 
@@ -63,24 +62,25 @@ export const updateTodo = async (todo: Partial<TodoType>) => {
       .select()
 
     revalidatePath('/')
-    return data
   } catch (error) {
-    return false
+    throw new Error('updateTodo')
   }
 }
 
 export const checkAll = async (todos: Pick<TodoType, 'id' | 'done'>[]) => {
-  const { data, error } = await supabase.from('Todos').upsert(todos)
-  revalidatePath('/')
-  return data
+  try {
+    const { data, error } = await supabase.from('Todos').upsert(todos)
+    revalidatePath('/')
+  } catch (error) {
+    throw new Error('checkAll')
+  }
 }
 
 export const removeTodo = async (id: number) => {
   try {
     const { error } = await supabase.from('Todos').delete().eq('id', id)
     revalidatePath('/')
-    return true
   } catch (error) {
-    return false
+    throw new Error('removeTodo')
   }
 }

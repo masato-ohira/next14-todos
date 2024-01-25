@@ -11,8 +11,7 @@ const TodoPage = async ({ params }: { params: { id: number } }) => {
         todo={data}
         variant='detail'
         className={`
-        p-20
-
+          p-20
       `}
       />
     </div>

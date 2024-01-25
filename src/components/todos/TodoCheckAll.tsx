@@ -1,17 +1,31 @@
 'use client'
 
-import { TodoType, checkAll } from '@/fetcher/todos'
 import { filter } from 'lodash-es'
-import { Switch } from '@ui/switch'
 import { useTransition } from 'react'
 import { cn } from '@/utils/cn'
+import { Switch } from '@ui/switch'
+
+import { type TodoType, checkAll } from '@/fetcher/todos'
 
 export const TodoCheckAll = ({ todos }: { todos: TodoType[] }) => {
   const [isLoading, startTransition] = useTransition()
 
-  const isChecked = () => {
+  const isCheckedAll = () => {
     const checkedTodos = filter(todos, (i) => i.done)
     return checkedTodos.length == todos.length
+  }
+
+  const onSubmitHandler = () => {
+    startTransition(() => {
+      checkAll(
+        todos.map((i) => {
+          return {
+            ...i,
+            done: !isCheckedAll(),
+          }
+        }),
+      )
+    })
   }
 
   return (
@@ -20,21 +34,10 @@ export const TodoCheckAll = ({ todos }: { todos: TodoType[] }) => {
         hstack
         ${isLoading ? 'opacity-50 pointer-events-none' : ''}
       `)}
-      action={() => {
-        startTransition(() => {
-          checkAll(
-            todos.map((i) => {
-              return {
-                ...i,
-                done: !isChecked(),
-              }
-            }),
-          )
-        })
-      }}
+      action={onSubmitHandler}
     >
       <span>一括チェック</span>
-      <Switch type={'submit'} checked={isChecked()} />
+      <Switch type={'submit'} checked={isCheckedAll()} />
     </form>
   )
 }

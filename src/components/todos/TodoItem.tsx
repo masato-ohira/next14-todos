@@ -1,12 +1,13 @@
 'use client'
 
-import { TodoType, removeTodo, updateTodo } from '@/fetcher/todos'
 import { cn } from '@/utils/cn'
+import dayjs from 'dayjs'
+import { useTransition } from 'react'
 import { Button } from '@ui/button'
 import { Switch } from '@ui/switch'
 import { TableCell, TableRow } from '@ui/table'
-import dayjs from 'dayjs'
-import { useTransition } from 'react'
+
+import { type TodoType, removeTodo, updateTodo } from '@/fetcher/todos'
 
 export const TodoItem = ({
   todo,
@@ -19,6 +20,23 @@ export const TodoItem = ({
 }) => {
   const [isLoading, startTransition] = useTransition()
 
+  const checkAction = () => {
+    startTransition(() => {
+      updateTodo({
+        ...todo,
+        done: !todo.done,
+      })
+    })
+  }
+
+  const deleteAction = () => {
+    if (confirm('削除してよろしいですか？')) {
+      startTransition(() => {
+        removeTodo(todo.id)
+      })
+    }
+  }
+
   return (
     <TableRow
       className={cn(`
@@ -29,29 +47,12 @@ export const TodoItem = ({
       <TableCell>{dayjs(todo.date).format('MM/DD HH:mm:ss')}</TableCell>
       <TableCell>{todo.title}</TableCell>
       <TableCell className={'align-middle'}>
-        <form
-          action={() => {
-            startTransition(() => {
-              updateTodo({
-                ...todo,
-                done: !todo.done,
-              })
-            })
-          }}
-        >
+        <form action={checkAction}>
           <Switch checked={todo.done} type={'submit'} />
         </form>
       </TableCell>
       <TableCell className='text-right'>
-        <form
-          action={() => {
-            if (confirm('削除してよろしいですか？')) {
-              startTransition(() => {
-                removeTodo(todo.id)
-              })
-            }
-          }}
-        >
+        <form action={deleteAction}>
           <Button variant={'secondary'}>削除</Button>
         </form>
       </TableCell>

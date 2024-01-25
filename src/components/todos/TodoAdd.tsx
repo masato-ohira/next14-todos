@@ -1,15 +1,22 @@
 'use client'
 
-import { addTodo } from '@/fetcher/todos'
+import { useRef, useTransition } from 'react'
 import { cn } from '@/utils/cn'
 import { Button } from '@ui/button'
 import { Input } from '@ui/input'
-import { useRef, useTransition } from 'react'
 import { LuLoader2 } from 'react-icons/lu'
+
+import { addTodo } from '@/fetcher/todos'
 
 export const TodoAdd = () => {
   const formRef = useRef<HTMLFormElement>(null)
   const [isLoading, startTransition] = useTransition()
+  const onSubmitHandler = (data: FormData) => {
+    startTransition(() => {
+      addTodo(data)
+    })
+    formRef.current?.reset()
+  }
   return (
     <form
       ref={formRef}
@@ -17,12 +24,7 @@ export const TodoAdd = () => {
         hstack gap-4 mb-6 max-w-xl
         ${isLoading ? 'pointer-events-none opacity-50' : ''}
       `)}
-      action={(data) => {
-        startTransition(() => {
-          addTodo(data)
-        })
-        formRef.current?.reset()
-      }}
+      action={onSubmitHandler}
     >
       <Input
         placeholder='Todoタイトルを入力'
