@@ -53,7 +53,9 @@ export const TodoItem = ({
       </TableCell>
       <TableCell className='text-right'>
         <form action={deleteAction}>
-          <Button variant={'secondary'}>削除</Button>
+          <Button variant={'secondary'} type={'submit'}>
+            削除
+          </Button>
         </form>
       </TableCell>
     </TableRow>
